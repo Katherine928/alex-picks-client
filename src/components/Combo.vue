@@ -86,7 +86,7 @@ export default {
 
 <style scoped>
 table {
-  padding: 1.5em;
+  padding: 1em;
   border-collapse: collapse;
   width: 100%;
   margin: 0 auto;
@@ -114,8 +114,8 @@ tbody > tr:nth-child(odd) {
   display: flex;
   flex-direction: row;
   column-gap: 10px;
-  row-gap: 20px;
-  width: 90%;
+  row-gap: 10px;
+  width: 100%;
   margin: 50px auto;
   justify-content: space-around;
   flex-wrap: wrap;
