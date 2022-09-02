@@ -100,7 +100,7 @@ thead {
 }
 th,
 td {
-  padding: 2.5em;
+  padding: 1em;
   font-size: 1.05em;
   font-weight: 700;
 }
@@ -113,9 +113,9 @@ tbody > tr:nth-child(odd) {
 .combo-container {
   display: flex;
   flex-direction: row;
-  column-gap: 50px;
+  column-gap: 10px;
   row-gap: 20px;
-  width: 80%;
+  width: 90%;
   margin: 50px auto;
   justify-content: space-around;
   flex-wrap: wrap;
@@ -128,25 +128,25 @@ form {
   flex-direction: column;
 }
 .form {
-  padding: 50px;
+  padding: 30px;
   display: flex;
   flex-direction: row;
-  column-gap: 20px;
+  column-gap: 5px;
   justify-content: center;
   box-shadow: rgba(3, 102, 214, 0.3) 0px 0px 0px 3px;
   width: 80%;
-  margin: 20px auto;
+  margin: 10px auto;
   font-size: large;
   font-weight: 700;
   align-items: baseline;
 }
 .result {
-  font-size: 50px !important;
+  font-size: 20px !important;
   color: red;
   display: inline;
 }
 .card {
-  width: 30%;
+  width: 15%;
 }
 .total {
   color: red;
