@@ -19,4 +19,13 @@ export default {
   getTotalSalary(fights) {
     return http.get("/total", fights);
   },
+  getAllFightsInUse() {
+    return http.get("/fightsInUse");
+  },
+  addInUse(fight) {
+    return http.post("/addInUse", fight);
+  },
+  deleteInUse(id) {
+    return http.delete("/deleteInUse/" + id);
+  },
 };

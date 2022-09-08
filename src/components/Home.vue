@@ -3,6 +3,10 @@
     <div class="input-container">
       <form class="form" v-on:submit:prevent="add">
         <div class="input-field">
+          <label for="id">Id:</label>
+          <input type="number" id="id" v-model="fight.id" />
+        </div>
+        <div class="input-field">
           <label for="name">Name:</label>
           <input type="text" id="name" v-model="fight.playName" />
         </div>
@@ -19,32 +23,81 @@
         </button>
       </form>
     </div>
-    <div class="list-container">
-      <table>
-        <thead id="header">
-          <tr>
-            <th>Fight No.</th>
-            <th>Name</th>
-            <th>Salary</th>
-            <th>Delete</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="fight in fights" v-bind:key="fight.playName">
-            <td>{{ fight.fight_No }}</td>
-            <td>{{ fight.playName }}</td>
-            <td>{{ formatPrice(fight.salary) }}</td>
-            <td>
-              <font-awesome-icon
-                icon="fa-solid fa-xmark"
-                :style="{ color: 'red' }"
-                class="delete-icon"
-                v-on:click="deleted(fight.id)"
-              />
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="container-1">
+      <div class="list-container">
+        <table>
+          <thead id="header">
+            <tr>
+              <th>Id</th>
+              <th>Fight No.</th>
+              <th>Name</th>
+              <th>Salary</th>
+              <th>Delete</th>
+              <th>Add</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="fight in fights" v-bind:key="fight.playName">
+              <td>{{ fight.id }}</td>
+              <td>{{ fight.fight_No }}</td>
+              <td>{{ fight.playName }}</td>
+              <td>{{ formatPrice(fight.salary) }}</td>
+              <td>
+                <font-awesome-icon
+                  icon="fa-solid fa-xmark"
+                  :style="{ color: 'red' }"
+                  class="delete-icon"
+                  v-on:click="deleted(fight.id)"
+                />
+              </td>
+              <td>
+                <font-awesome-icon
+                  icon="fa-solid fa-user-plus"
+                  :style="{ color: 'green' }"
+                  class="delete-icon"
+                  v-on:click="addInUse(fight)"
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="list-container inuse">
+        <table>
+          <thead id="header">
+            <tr>
+              <th>Fight No.</th>
+              <th>Name</th>
+              <th>Salary</th>
+              <th>Delete</th>
+              <th>Back</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="i in fightsInUse" v-bind:key="i.playName">
+              <td>{{ i.fight_No }}</td>
+              <td>{{ i.playName }}</td>
+              <td>{{ formatPrice(i.salary) }}</td>
+              <td>
+                <font-awesome-icon
+                  icon="fa-solid fa-xmark"
+                  :style="{ color: 'red' }"
+                  class="delete-icon"
+                  v-on:click="deletedInUse(i.id)"
+                />
+              </td>
+              <td>
+                <font-awesome-icon
+                  icon="fa-solid fa-arrow-rotate-left"
+                  :style="{ color: 'green' }"
+                  class="delete-icon"
+                  v-on:click="back(i)"
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </template>
@@ -56,6 +109,7 @@ export default {
   name: "the-home",
   data() {
     return {
+      fightsInuse: [],
       fights: [],
       fight: {},
     };
@@ -64,6 +118,11 @@ export default {
     getAllFights() {
       FightService.getAllFights().then((response) => {
         this.fights = response.data;
+      });
+    },
+    getAllFightsInUse() {
+      FightService.getAllFightsInUse().then((response) => {
+        this.fightsInUse = response.data;
       });
     },
     add() {
@@ -76,8 +135,33 @@ export default {
         }
       });
     },
+    addInUse(fight) {
+      FightService.addInUse(fight).then((response) => {
+        if (response.status === 201 || response.status === 200) {
+          this.deleted(fight.id);
+          this.getAllFightsInUse();
+          this.getAllFights();
+        } else {
+          alert("Opps! Something went wrong!");
+        }
+      });
+    },
     deleted(id) {
       FightService.delete(id).then(() => {
+        this.getAllFights();
+      });
+    },
+    deletedInUse(id) {
+      FightService.deleteInUse(id).then(() => {
+        this.getAllFights();
+        this.getAllFightsInUse();
+      });
+    },
+    back(fight) {
+      this.fight = fight;
+      this.add(this.fight);
+      FightService.deleteInUse(fight.id).then(() => {
+        this.getAllFightsInUse();
         this.getAllFights();
       });
     },
@@ -87,6 +171,7 @@ export default {
     },
   },
   created() {
+    this.getAllFightsInUse();
     this.getAllFights();
   },
 };
@@ -106,10 +191,7 @@ export default {
   font-weight: 700;
   align-items: baseline;
 }
-.input-field {
-  display: flex;
-  column-gap: 5px;
-}
+
 .button-27 {
   appearance: none;
   background-color: #000000;
@@ -178,5 +260,15 @@ tbody > tr:nth-child(odd) {
 }
 .delete-icon {
   cursor: pointer;
+}
+.container-1 {
+  display: flex;
+  flex-direction: row;
+  align-content: space-between;
+  justify-content: baseline;
+  width: 100%;
+}
+.list-container {
+  width: 100%;
 }
 </style>
